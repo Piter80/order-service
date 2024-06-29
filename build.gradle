@@ -18,6 +18,7 @@ repositories {
 }
 
 ext {
+	set('springCloudVersion', "2021.0.3")
 	set('testcontainersVersion', "1.17.3")
 }
 
@@ -49,4 +50,16 @@ dependencyManagement {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+bootBuildImage {
+	imageName = "${project.name}"
+	environment = ["BP_JVM_VERSION" : "17.*"]
+	docker {
+		publishRegistry {
+			username = project.findProperty("REGISTRYUSERNAME")
+			password = project.findProperty("REGISTRYTOKEN")
+			url = project.findProperty("REGISTRYURL")
+		}
+	}
 }
